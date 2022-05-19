@@ -3,6 +3,7 @@ const app = express();
 const port = 5000;
 
 const { User } = require('../server/models/User');
+const Product = require('../server/models/Product');
 
 const { auth } = require('../server/middleware/auth');
 const bodyParser = require('body-parser');
@@ -107,6 +108,25 @@ app.get('/api/users/logout', auth, (req, res) => {
       success: true,
     });
   });
+});
+
+////////////////////////PRODUCTS///////////////////////
+/////
+
+app.get('/api/products', async (req, res) => {
+  const products = await Product.find();
+  res.send(products);
+});
+
+app.get('/api/products/:id', async (req, res) => {
+  const { id } = req.params;
+  const product = await Product.findById(id);
+  res.send(product);
+});
+
+app.post('/api/products/new', (req, res) => {
+  const newProduct = new Product(req.body);
+  newProduct.save();
 });
 
 app.listen(port, () => {
