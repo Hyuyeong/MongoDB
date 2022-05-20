@@ -8,7 +8,7 @@ const Products = ({}) => {
   useEffect(() => {
     axios.get('/api/products').then(response => setProducts(response.data));
   }, []);
-  console.log(products);
+  // console.log(products);
 
   const productName = products.map(product => (
     <Link key={product._id} to={product._id}>

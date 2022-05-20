@@ -1,26 +1,50 @@
-import { useState } from 'react';
-//import styles from './ProductNew.module.css'
+import { useState, useEffect } from 'react';
+//import styles from './ProductEdit.module.css'
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
 
-const ProductNew = ({}) => {
+import { Link, useParams, useNavigate } from 'react-router-dom';
+
+const ProductEdit = props => {
+  const { id } = useParams();
+
+  useEffect(() => {
+    axios
+      .get(`/api/products/${id}`)
+      .then(response => setProduct(response.data));
+  }, []);
+
+  // axios.get(`/api/products/${id}`).then(response => setProduct(response.data));
+
+  const [product, setProduct] = useState({});
+  const [infoget, setInfoget] = useState({});
+
+  // console.log(infoget.name);
+
   const [name, setName] = useState();
+  const [price, setPrice] = useState();
+  const [category, setCategory] = useState();
+
+  const infogetHandler = e => {
+    setInfoget(product);
+  };
+
   const nameHandler = e => {
     setName(e.currentTarget.value);
-    console.log(name);
+    // console.log(name);
   };
 
-  const [price, setPrice] = useState();
   const priceHandler = e => {
     setPrice(e.currentTarget.value);
-    console.log(price);
+    // console.log(price);
   };
 
-  const [category, setCategory] = useState();
   const categoryHandler = e => {
     setCategory(e.currentTarget.value);
-    console.log(category);
+    // console.log(category);
   };
+
+  console.log(product);
+  // console.log(product.name);
 
   const submitHandler = e => {
     e.preventDefault();
@@ -31,12 +55,16 @@ const ProductNew = ({}) => {
       category,
     };
 
-    axios.post('/api/products/new', newProduct).then(response => response.data);
+    axios
+      .put(`/api/products/${product._id}`, newProduct)
+      .then(response => response.data);
 
     console.log(newProduct);
-    navigate('/products');
-  };
 
+    if (newProduct) {
+      navigate('/products');
+    }
+  };
   let navigate = useNavigate();
   return (
     <div>
@@ -77,7 +105,8 @@ const ProductNew = ({}) => {
       <Link to="/products">
         <button>all Product</button>
       </Link>
+      <button onClick={infogetHandler}>정보가져오기</button>
     </div>
   );
 };
-export default ProductNew;
+export default ProductEdit;

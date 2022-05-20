@@ -127,6 +127,35 @@ app.get('/api/products/:id', async (req, res) => {
 app.post('/api/products/new', (req, res) => {
   const newProduct = new Product(req.body);
   newProduct.save();
+  // res.redirect(`/api/products/${newProduct._id}`);
+  console.log(newProduct._id);
+});
+////////////////////////////////////////
+// app.get('/api/products/:id/edit', async (req, res) => {
+//   const { id } = req.params;
+//   const product = await Product.findById(id);
+//   res.send(product);
+// });
+
+///////////////////////////////////////////////////
+app.post('/api/products/:id/edit', (req, res) => {
+  const { id } = req.params;
+  Product.findById(id).exec((err, productInfo) => {
+    if (err) return res.status(400).json({ success: false, err });
+    return res.status(200).json({ success: true, productInfo });
+  });
+});
+
+app.put('/api/products/:id', async (req, res) => {
+  const { id } = req.params;
+  const product = await Product.findByIdAndUpdate(id, req.body, {
+    runValidators: true,
+  });
+});
+
+app.delete('/api/products/:id', async (req, res) => {
+  const { id } = req.params;
+  const product = await Product.findByIdAndDelete(id);
 });
 
 app.listen(port, () => {
