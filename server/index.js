@@ -10,6 +10,8 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const config = require('../server/config/key');
+
+const Campground = require('../server/models/Campground');
 // const { createProxyMiddleware } = require('http-proxy-middleware');
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -157,6 +159,46 @@ app.delete('/api/products/:id', async (req, res) => {
   const { id } = req.params;
   const product = await Product.findByIdAndDelete(id);
 });
+
+//////////////  CAMPGROUND
+///////////////////////////////////////////////
+
+app.get('/api/campgrounds', async (req, res) => {
+  const campgrounds = await Campground.find({});
+  res.send(campgrounds);
+});
+
+app.get('/api/campgrounds/:id', async (req, res) => {
+  const { id } = req.params;
+  const campground = await Campground.findById(id);
+  res.send(campground);
+});
+
+app.post('/api/campgrounds/new', async (req, res) => {
+  const newCampground = await new Campground(req.body);
+  newCampground.save();
+});
+
+app.get('/api/campgrounds/:id/edit', async (req, res) => {
+  const { id } = req.params;
+  const campground = await Campground.findById(id);
+  res.send(campground);
+});
+
+app.put('/api/campgrounds/:id', async (req, res) => {
+  const { id } = req.params;
+  const campground = await Campground.findByIdAndUpdate(id, req.body, {
+    runValidators: true,
+  });
+});
+
+app.delete('/api/campgrounds/:id', async (req, res) => {
+  const { id } = req.params;
+  const campground = await Campground.findByIdAndDelete(id);
+});
+
+///////////////////////////////////////////////
+//////////
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

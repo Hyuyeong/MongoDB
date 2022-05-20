@@ -1,0 +1,12 @@
+.card {
+  /* margin-top: 15rem; */
+  display: grid;
+  margin: 5rem auto;
+  /* align-items: center; */
+  justify-content: center;
+  gap: 2rem;
+  width: 30rem;
+}
+.title {
+  font-weight: 600;
+}
