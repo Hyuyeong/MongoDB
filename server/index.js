@@ -11,6 +11,8 @@ const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const config = require('../server/config/key');
 
+const catchAsync = require('./utils/catchAsync');
+
 const Campground = require('../server/models/Campground');
 // const { createProxyMiddleware } = require('http-proxy-middleware');
 
@@ -168,35 +170,59 @@ app.get('/api/campgrounds', async (req, res) => {
   res.send(campgrounds);
 });
 
-app.get('/api/campgrounds/:id', async (req, res) => {
-  const { id } = req.params;
-  const campground = await Campground.findById(id);
-  res.send(campground);
+app.get(
+  '/api/campgrounds/:id',
+  catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const campground = await Campground.findById(id);
+    res.send(campground);
+  })
+);
+
+app.post(
+  '/api/campgrounds/new',
+  catchAsync(async (req, res) => {
+    const newCampground = await new Campground(req.body);
+    newCampground.save();
+  })
+);
+
+app.get(
+  '/api/campgrounds/:id/edit',
+  catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const campground = await Campground.findById(id);
+    res.send(campground);
+  })
+);
+
+app.put(
+  '/api/campgrounds/:id',
+  catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const campground = await Campground.findByIdAndUpdate(id, req.body, {
+      runValidators: true,
+    });
+  })
+);
+
+app.delete(
+  '/api/campgrounds/:id',
+  catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const campground = await Campground.findByIdAndDelete(id);
+  })
+);
+
+////////////////////ERROR HANDLE//////////////////
+
+app.all('*', (req, res, next) => {
+  res.send('error');
 });
 
-app.post('/api/campgrounds/new', async (req, res) => {
-  const newCampground = await new Campground(req.body);
-  newCampground.save();
+app.use((err, req, res, next) => {
+  res.send('error');
 });
-
-app.get('/api/campgrounds/:id/edit', async (req, res) => {
-  const { id } = req.params;
-  const campground = await Campground.findById(id);
-  res.send(campground);
-});
-
-app.put('/api/campgrounds/:id', async (req, res) => {
-  const { id } = req.params;
-  const campground = await Campground.findByIdAndUpdate(id, req.body, {
-    runValidators: true,
-  });
-});
-
-app.delete('/api/campgrounds/:id', async (req, res) => {
-  const { id } = req.params;
-  const campground = await Campground.findByIdAndDelete(id);
-});
-
 ///////////////////////////////////////////////
 //////////
 

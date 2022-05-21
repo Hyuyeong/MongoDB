@@ -13,6 +13,7 @@
 .image {
   display: grid;
   width: 25rem;
+  height: 20rem;
   margin: 0 auto;
   margin-bottom: 1rem;
 }

@@ -3,7 +3,7 @@ import styles from './Edit.module.css';
 import axios from 'axios';
 
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { Form, Button, FloatingLabel } from 'react-bootstrap';
+import { Form, Button, FloatingLabel, InputGroup } from 'react-bootstrap';
 
 const Edit = props => {
   const { id } = useParams();
@@ -93,13 +93,16 @@ const Edit = props => {
 
       <Form.Group className="mb-3" controlId="formBasicText">
         <Form.Label>Price</Form.Label>
-        <Form.Control
-          type="number"
-          placeholder={campground.price}
-          value={price}
-          onChange={priceHandler}
-          min="0"
-        />
+        <InputGroup>
+          <InputGroup.Text id="inputGroupPrepend">$</InputGroup.Text>
+          <Form.Control
+            type="number"
+            placeholder={campground.price}
+            value={price}
+            onChange={priceHandler}
+            min="0"
+          />
+        </InputGroup>
       </Form.Group>
 
       <img className={styles.image} src={campground.image}></img>

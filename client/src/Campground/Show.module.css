@@ -31,3 +31,12 @@
   color: rgb(121, 105, 12);
   font-weight: 600;
 }
+
+.error {
+  text-align: center;
+  display: grid;
+  width: 15rem;
+  /* height: 100vh; */
+  margin: 0 auto;
+  margin-top: 15rem;
+}
