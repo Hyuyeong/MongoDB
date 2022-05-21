@@ -1,12 +1,22 @@
 .card {
   /* margin-top: 15rem; */
   display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   margin: 5rem auto;
   /* align-items: center; */
   justify-content: center;
   gap: 2rem;
-  width: 30rem;
+  width: 80rem;
 }
 .title {
+  font-weight: 600;
+}
+
+.image {
+  height: 20rem;
+}
+
+.price {
+  color: rgb(121, 105, 12);
   font-weight: 600;
 }

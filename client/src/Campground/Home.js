@@ -25,14 +25,19 @@ const Home = ({}) => {
   const Campground = campgrounds.map(campground => {
     return (
       <Card>
-        <Card.Img variant="top" src={campground.image} />
+        <Card.Img
+          className={styles.image}
+          variant="top"
+          src={campground.image}
+        />
         <Card.Body>
           <Card.Title className={styles.title} key={campground._id}>
             {campground.title}
           </Card.Title>
-          <Card.Text>{campground.description}</Card.Text>
+          <Card.Text className={styles.price}>${campground.price}</Card.Text>
+          <Card.Text>{campground.location}</Card.Text>
           <Link to={campground._id}>
-            <Button variant="primary">Go</Button>
+            <Button variant="secondary">Veiw Detail</Button>
           </Link>
         </Card.Body>
       </Card>

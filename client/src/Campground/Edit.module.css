@@ -1,0 +1,18 @@
+.form {
+  display: grid;
+  margin: 0 auto;
+
+  width: 30rem;
+  margin-top: 5rem;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  padding: 2rem;
+
+  border-radius: 10px;
+}
+
+.image {
+  display: grid;
+  width: 25rem;
+  margin: 0 auto;
+  margin-bottom: 1rem;
+}

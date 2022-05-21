@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-//import styles from './Show.module.css'
+import styles from './Show.module.css';
+import { Card, ListGroupItem, ListGroup, Button } from 'react-bootstrap';
 import axios from 'axios';
 const Show = ({}) => {
   const { id } = useParams();
@@ -22,7 +23,7 @@ const Show = ({}) => {
   let navgate = useNavigate();
   return (
     <div>
-      <h1> {campground.title}</h1>
+      {/* <h1> {campground.title}</h1>
       <ul>
         <li>Location: {campground.location}</li>
       </ul>
@@ -34,7 +35,39 @@ const Show = ({}) => {
       <Link to={'/campgrounds/' + id + '/edit'}>
         <button>edit</button>
       </Link>
-      <button onClick={deleteHandler}>DELETE</button>
+      <button onClick={deleteHandler}>DELETE</button> */}
+
+      <Card className={styles.card}>
+        <Card.Img
+          className={styles.image}
+          variant="top"
+          src={campground.image}
+        />
+        <Card.Body>
+          <Card.Title>{campground.title}</Card.Title>
+          <Card.Text>{campground.location}</Card.Text>
+        </Card.Body>
+        <ListGroup className="list-group-flush">
+          <ListGroupItem className={styles.price}>
+            <span>Price: </span>
+            {campground.price} $
+          </ListGroupItem>
+          <ListGroupItem>{campground.description}</ListGroupItem>
+        </ListGroup>
+        <Card.Body className={styles.link}>
+          <Card.Link href="/campgrounds">Back</Card.Link>
+          <Link to={'/campgrounds/' + id + '/edit'}>
+            <Button variant="warning">EDIT</Button>
+          </Link>
+          <Button
+            className={styles.delete_btn}
+            variant="danger"
+            onClick={deleteHandler}
+          >
+            DELETE
+          </Button>
+        </Card.Body>
+      </Card>
     </div>
   );
 };

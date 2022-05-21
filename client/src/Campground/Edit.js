@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-//import styles from './Edit.module.css'
+import styles from './Edit.module.css';
 import axios from 'axios';
-import { Button } from 'react-bootstrap';
+
 import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Form, Button, FloatingLabel } from 'react-bootstrap';
 
 const Edit = props => {
   const { id } = useParams();
@@ -18,29 +19,45 @@ const Edit = props => {
   const [campground, setCampground] = useState({});
 
   const [title, setTitle] = useState();
-  const [location, setLocation] = useState();
-
   const titleHandler = e => {
     setTitle(e.currentTarget.value);
     // console.log(title);
   };
 
+  const [location, setLocation] = useState();
   const locationHandler = e => {
     setLocation(e.currentTarget.value);
     // console.log(location);
   };
 
-  console.log(campground);
-  // console.log(campground.title);
+  const [image, setImage] = useState();
+  const imageHandler = e => {
+    setImage(e.currentTarget.value);
+  };
 
+  const [price, setPrice] = useState();
+  const priceHandler = e => {
+    setPrice(e.currentTarget.value);
+  };
+
+  const [description, setDescrption] = useState();
+  const descriptionHandler = e => {
+    setDescrption(e.currentTarget.value);
+  };
+
+  if (+price < 0) {
+    alert('Plese check the price!');
+  }
   const submitHandler = e => {
     e.preventDefault();
 
     let newCampground = {
       title,
       location,
+      image,
+      price,
+      description,
     };
-
     axios
       .put(`/api/campgrounds/${campground._id}`, newCampground)
       .then(response => response.data);
@@ -53,34 +70,67 @@ const Edit = props => {
   };
   let navigate = useNavigate();
   return (
-    <div>
-      <h1>Add A Campground</h1>
-      <form onSubmit={submitHandler}>
-        <label htmlFor="title">Campground title</label>
-        <input
+    <Form className={styles.form} onSubmit={submitHandler}>
+      <Form.Group className="mb-3" controlId="formBasicText">
+        <Form.Label>Title</Form.Label>
+        <Form.Control
           type="text"
-          name="title"
-          id="title"
+          placeholder={campground.title}
           value={title}
           onChange={titleHandler}
-          placeholder="campground title"
         />
-        <label htmlFor="location">Location </label>
-        <input
+      </Form.Group>
+
+      <Form.Group className="mb-3" controlId="formBasicText">
+        <Form.Label>Location</Form.Label>
+        <Form.Control
           type="text"
-          id="location"
-          name="location"
+          placeholder={campground.location}
           value={location}
           onChange={locationHandler}
-          placeholder="location"
         />
+      </Form.Group>
 
-        <button type="submit">Submit</button>
-      </form>
-      <Link to="/campgrounds">
-        <Button variant="primary">all Campground</Button>
-      </Link>
-    </div>
+      <Form.Group className="mb-3" controlId="formBasicText">
+        <Form.Label>Price</Form.Label>
+        <Form.Control
+          type="number"
+          placeholder={campground.price}
+          value={price}
+          onChange={priceHandler}
+          min="0"
+        />
+      </Form.Group>
+
+      <img className={styles.image} src={campground.image}></img>
+      <Form.Group className="mb-3" controlId="formBasicText">
+        <Form.Label>Iamge URL</Form.Label>
+        <Form.Control
+          type="text"
+          placeholder={campground.image}
+          value={image}
+          onChange={imageHandler}
+        />
+      </Form.Group>
+
+      <FloatingLabel
+        className="mb-3"
+        controlId="floatingTextarea2"
+        label="Description"
+      >
+        <Form.Control
+          as="textarea"
+          placeholder="Leave a description here"
+          style={{ height: '100px' }}
+          value={description}
+          onChange={descriptionHandler}
+        />
+      </FloatingLabel>
+
+      <Button variant="warning" type="submit">
+        Update !!
+      </Button>
+    </Form>
   );
 };
 export default Edit;

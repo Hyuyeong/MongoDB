@@ -1,0 +1,33 @@
+.card {
+  /* margin-top: 15rem; */
+  display: grid;
+  margin: 5rem auto;
+  /* align-items: center; */
+  justify-content: center;
+  gap: 2rem;
+  width: 40rem;
+}
+.title {
+  font-weight: 600;
+}
+
+.image {
+  height: 30rem;
+}
+.link {
+  display: grid;
+  grid-template-columns: 1fr 1fr 5fr;
+  justify-content: center;
+  /* text-align: center; */
+  align-items: center;
+  /* justify-content: space-between; */
+}
+
+.delete_btn {
+  margin-left: 20rem;
+}
+
+.price {
+  color: rgb(121, 105, 12);
+  font-weight: 600;
+}
