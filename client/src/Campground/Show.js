@@ -41,6 +41,11 @@ const Show = ({}) => {
     navgate('/campgrounds');
   };
 
+  const deleteReviewHadndler = e => {
+    axios.delete(`/api/campgrounds/${id}/review/${e.currentTarget.value}`);
+    alert('Review has been deleted');
+    window.location.reload();
+  };
   const submitHandler = e => {
     e.preventDefault();
 
@@ -56,6 +61,8 @@ const Show = ({}) => {
       axios
         .post(`/api/campgrounds/${campground._id}/review`, newReview)
         .then(response => response.data);
+      alert('Review has been submitted');
+      window.location.reload();
     } else if (rating) {
       alert('Review is empty');
     } else if (review) {
@@ -65,34 +72,36 @@ const Show = ({}) => {
     }
   };
 
-  console.log(campground);
-
   let navgate = useNavigate();
-  if (!campground) return;
 
-  // if (campground) {
-  //   const reviewlist = 'dasfdsfdasfdsfs';
+  const [toggle, setToggle] = useState(false);
 
-  //   setReviewList(reviewlist);
-  //   console.log(reviewlist);
-  // }
+  const [seeReview, setSeeReview] = useState();
+  const seeReviewHandler = e => {
+    const reviewData = campground.reviews.map(review => {
+      return (
+        <Card className={styles.card}>
+          <Card.Body>
+            <Card.Text>Review : {review.review}</Card.Text>
+            <Card.Text>Rating : {review.rating}</Card.Text>
+            <Button
+              value={review._id}
+              onClick={deleteReviewHadndler}
+              variant="danger"
+            >
+              Delete
+            </Button>
+          </Card.Body>
+        </Card>
+      );
+    });
+
+    setSeeReview(reviewData);
+    setToggle(prev => !prev);
+  };
 
   return (
     <div>
-      {/* <h1> {campground.title}</h1>
-      <ul>
-      <li>Location: {campground.location}</li>
-      </ul>
-
-      <img src={campground.image} alt={campground.title} />
-      <p>{campground.description}</p>
-
-      <Link to="/campgrounds">all campgrounds</Link>
-      <Link to={'/campgrounds/' + id + '/edit'}>
-        <button>edit</button>
-      </Link>
-      <button onClick={deleteHandler}>DELETE</button> */}
-
       {campground === 'error' ? (
         <Alert className={styles.error} variant="danger">
           Invaild ID !!!
@@ -153,8 +162,17 @@ const Show = ({}) => {
               Submit
             </Button>
           </Form>
-
-          {/* <div>{campground}</div> */}
+          <div className={styles.review_btn}>
+            <Button
+              className="mb-3"
+              // className={styles.card}
+              variant="info"
+              onClick={seeReviewHandler}
+            >
+              See Review
+            </Button>
+          </div>
+          <div>{toggle && seeReview}</div>
         </div>
       )}
     </div>
