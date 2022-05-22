@@ -6,7 +6,7 @@ const { User } = require('../server/models/User');
 const Product = require('../server/models/Product');
 
 const { auth } = require('../server/middleware/auth');
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const config = require('../server/config/key');
@@ -14,10 +14,14 @@ const config = require('../server/config/key');
 const catchAsync = require('./utils/catchAsync');
 
 const Campground = require('../server/models/Campground');
+const Review = require('./models/Review');
 // const { createProxyMiddleware } = require('http-proxy-middleware');
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.use(cookieParser());
 
@@ -170,11 +174,21 @@ app.get('/api/campgrounds', async (req, res) => {
   res.send(campgrounds);
 });
 
+// app.get(
+//   '/api/campgrounds/:id',
+//   catchAsync(async (req, res) => {
+//     const { id } = req.params;
+//     const campground = await Campground.findById(id);
+//     res.send(campground);
+//   })
+// );
+
 app.get(
   '/api/campgrounds/:id',
   catchAsync(async (req, res) => {
     const { id } = req.params;
-    const campground = await Campground.findById(id);
+    const campground = await Campground.findById(id).populate('reviews');
+    console.log(campground);
     res.send(campground);
   })
 );
@@ -184,6 +198,8 @@ app.post(
   catchAsync(async (req, res) => {
     const newCampground = await new Campground(req.body);
     newCampground.save();
+
+    console.log(req.body);
   })
 );
 
@@ -211,6 +227,20 @@ app.delete(
   catchAsync(async (req, res) => {
     const { id } = req.params;
     const campground = await Campground.findByIdAndDelete(id);
+  })
+);
+
+app.post(
+  '/api/campgrounds/:id/review',
+  catchAsync(async (req, res) => {
+    const campground = await Campground.findById(req.params.id);
+    const review = new Review(req.body.reviews);
+    // console.log(campground);
+    campground.reviews.push(review);
+    await review.save();
+    await campground.save();
+    console.log(review);
+    // console.log(campground.reviews.push(review));
   })
 );
 
